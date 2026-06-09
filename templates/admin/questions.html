@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Questions</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #111827);
+            color: #e5e7eb;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 26px;
+            color: #f3f4f6;
+        }
+
+        /* Add Question Card */
+        .card {
+            background: #1f2937;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            background: #0f172a;
+            color: white;
+            font-size: 15px;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 15px;
+            transition: 0.2s;
+        }
+
+        textarea:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+        }
+
+        .btn {
+            padding: 12px 18px;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #16a34a;
+        }
+
+        /* Question List */
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .question-item {
+            background: #1f2937;
+            padding: 20px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.2s;
+        }
+
+        .question-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-text {
+            flex: 1;
+            padding-right: 20px;
+            font-size: 15px;
+            color: #e5e7eb;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: 0.2s;
+        }
+
+        .edit {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .edit:hover {
+            background: #2563eb;
+        }
+
+        .delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .delete:hover {
+            background: #dc2626;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #374151;
+            margin: 20px 0;
+        }
+
+        .section-title {
+            margin: 20px 0;
+            font-size: 20px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Admin Question Panel</h1>
+
+    <!-- Add Question -->
+    <div class="card">
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <textarea name="question_text" placeholder="Enter new question..." required></textarea>
+
+            <button class="btn" type="submit">
+                Add Question
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- Questions List -->
+    <div class="section-title">All Questions</div>
+
+    <div class="question-list">
+
+        {% for q in questions %}
+
+        <div class="question-item">
+
+            <div class="question-text">
+                {{ q.question_text }}
+            </div>
+
+            <div class="actions">
+                <a class="edit" href="{% url 'edit_question' q.id %}">Edit</a>
+                <a class="delete" href="{% url 'delete_question' q.id %}">Delete</a>
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
