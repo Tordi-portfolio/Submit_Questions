@@ -164,9 +164,9 @@
         <p>Click below to begin your examination</p>
 
         {% if remaining > 0 %}
-            <a class="start-btn" href="{% url 'assessment' %}">Start Assessment</a>
+            <a class="start-btn" href="{% url 'start_assessment' %}">Start Assessment</a>
         {% else %}
-            <a class="start-btn disabled">No Questions Available</a>
+            <a class="start-btn" href="{% url 'start_assessment' %}">Start Assessment</a>
         {% endif %}
     </div>
 

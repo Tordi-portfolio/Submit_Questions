@@ -44,5 +44,16 @@ class StudentProgress(models.Model):
 
     completed = models.BooleanField(default=False)
 
+    start_time = models.DateTimeField(null=True, blank=True)
+
     def __str__(self):
         return self.student.username
+    
+
+
+class ExamSettings(models.Model):
+    duration_minutes = models.IntegerField(default=30)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.duration_minutes} mins"

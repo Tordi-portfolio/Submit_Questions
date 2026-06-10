@@ -8,30 +8,62 @@ from assessment.models import (
 from .forms import RegisterForm
 
 
+from django.contrib.auth.models import User
+from .models import Profile
+from .forms import RegisterForm
+
 def register_view(request):
 
-    if request.method == 'POST':
+    form = RegisterForm()
+
+    if request.method == "POST":
 
         form = RegisterForm(request.POST)
 
         if form.is_valid():
 
-            user = form.save()
+            password = form.cleaned_data["password"]
+            confirm = form.cleaned_data["confirm_password"]
 
-            login(request, user)
+            if password != confirm:
+                return render(request, "accounts/register.html", {
+                    "form": form,
+                    "error": "Passwords do not match"
+                })
 
-            return redirect('dashboard')
+            full_name = form.cleaned_data["full_name"]
+            username = form.cleaned_data["username"]
+            phone = form.cleaned_data["phone_number"]
+            country = form.cleaned_data["country"]
+            age = form.cleaned_data["age"]
 
-    else:          
+            user = User.objects.create_user(
+                username=username,
+                password=password
+            )
 
-        form = RegisterForm()
+            # split full name
+            name_parts = full_name.split(" ", 1)
+            user.first_name = name_parts[0]
 
-    return render(
-        request,
-        'accounts/register.html',
-        {'form': form}
-    )
+            if len(name_parts) > 1:
+                user.last_name = name_parts[1]
 
+            user.save()
+
+            # create profile
+            Profile.objects.create(
+                user=user,
+                phone_number=phone,
+                country=country,
+                age=age
+            )
+
+            return redirect("login")
+
+    return render(request, "accounts/register.html", {
+        "form": form
+    })
 
 from django.contrib.auth.decorators import login_required
 

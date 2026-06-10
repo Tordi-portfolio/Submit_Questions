@@ -7,7 +7,9 @@ from .views import (
     edit_question,
     delete_question,
     admin_responses,
-    user_responses
+    exam_settings,
+    user_responses,
+    start_assessment,
 )
 
 urlpatterns = [
@@ -21,4 +23,8 @@ urlpatterns = [
 
     path('admin/users/', admin_users, name='admin_users'),
     path('admin/users/<int:user_id>/', user_responses, name='user_responses'),
+
+    path('admin/settings/', exam_settings, name='exam_settings'),
+
+    path('start-assessment/', start_assessment, name='start_assessment'),
 ]

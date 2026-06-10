@@ -40,13 +40,22 @@
         background: #374151;
         border-radius: 10px;
         overflow: hidden;
-        margin-bottom: 25px;
+        margin-bottom: 15px;
     }
 
     .progress-fill {
         height: 100%;
         background: #22c55e;
         transition: width 0.3s ease;
+    }
+
+    /* 🔥 TIMER STYLE */
+    .timer {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #ef4444;
+        margin-bottom: 15px;
     }
 
     .question-box {
@@ -73,7 +82,6 @@
         align-items: flex-end;
     }
 
-    /* WhatsApp-style textarea */
     #answer {
         flex: 1;
         min-height: 55px;
@@ -144,20 +152,24 @@
 
         <div class="exam-card">
 
+            <!-- 🔥 TIMER -->
+            <div class="timer" id="timer">
+                Loading timer...
+            </div>
+
             <div class="progress">
                 <span>Question {{ current }} of {{ total }}</span>
                 <span>{{ current }}/{{ total }}</span>
             </div>
 
             <div class="progress-bar">
-                <div
-                    class="progress-fill"
-                    style="width:{% widthratio current total 100 %}%;">
+                <div class="progress-fill"
+                     style="width:{% widthratio current total 100 %}%;">
                 </div>
             </div>
 
             <div class="question-box">
-                <h3 id="questionText">
+                <h3>
                     {{ question.question_text }}
                 </h3>
             </div>
@@ -181,7 +193,7 @@
 
                 <div class="hint">
                     Press <strong>Enter</strong> to submit •
-                    <strong>Shift + Enter</strong> for a new line
+                    <strong>Shift + Enter</strong> for new line
                 </div>
 
             </form>
@@ -193,26 +205,28 @@
 </div>
 
 <script>
-const form = document.getElementById("form");
+/* =========================
+   AUTO-GROW TEXTAREA
+========================= */
 const input = document.getElementById("answer");
 
-/* Auto-grow textarea like WhatsApp */
 input.addEventListener("input", function () {
     this.style.height = "auto";
     this.style.height = this.scrollHeight + "px";
 });
 
-/* Submit answer */
+/* =========================
+   SUBMIT ANSWER
+========================= */
+const form = document.getElementById("form");
+
 form.addEventListener("submit", function(e) {
 
     e.preventDefault();
 
     let answer = input.value.trim();
 
-    if (!answer) {
-        alert("Please enter an answer.");
-        return;
-    }
+    if (!answer) return alert("Please enter an answer.");
 
     fetch("", {
         method: "POST",
@@ -227,26 +241,55 @@ form.addEventListener("submit", function(e) {
     .then(res => res.json())
 
     .then(data => {
-
         if (data.completed) {
             window.location.href = "/assessment/";
         } else {
             location.reload();
         }
-
     });
 
 });
 
-/* Enter = Submit | Shift+Enter = New Line */
+/* Enter submit */
 input.addEventListener("keydown", function(e) {
-
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         form.dispatchEvent(new Event("submit"));
     }
-
 });
+
+/* =========================
+   🔥 LIVE TIMER
+========================= */
+
+const endTime = new Date("{{ end_time }}").getTime();
+
+function updateTimer() {
+
+    const now = new Date().getTime();
+    const distance = endTime - now;
+
+    if (distance <= 0) {
+        document.getElementById("timer").innerHTML = "TIME UP";
+
+        setTimeout(() => {
+            window.location.href = "/dashboard/";
+        }, 1000);
+
+        return;
+    }
+
+    const hours = Math.floor(distance / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("timer").innerHTML =
+        `⏱ Time Left: ${hours}h ${minutes}m ${seconds}s`;
+}
+
+setInterval(updateTimer, 1000);
+updateTimer();
+
 </script>
 
 {% endblock %}

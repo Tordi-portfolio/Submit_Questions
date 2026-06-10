@@ -1,18 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from .models import Profile
 
+class RegisterForm(forms.Form):
 
-class RegisterForm(UserCreationForm):
+    full_name = forms.CharField(max_length=150)
+    username = forms.CharField(max_length=150)
+    phone_number = forms.CharField(max_length=20)
+    country = forms.CharField(max_length=100)
+    age = forms.IntegerField()
 
-    email = forms.EmailField(required=True)
-
-    class Meta:
-        model = User
-
-        fields = [
-            'username',
-            'email',
-            'password1',
-            'password2'
-        ]
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)

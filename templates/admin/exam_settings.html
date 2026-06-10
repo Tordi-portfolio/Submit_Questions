@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Exam Time Settings{% endblock %}
+
+{% block content %}
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: #22c55e;
+            border: none;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        .note {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+<body>
+
+<div class="box">
+
+    <h2>⏱ Exam Duration</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Duration (minutes)</label>
+        <input type="number" name="duration_minutes"
+               value="{{ settings.duration_minutes }}">
+
+        <button type="submit">Save Settings</button>
+    </form>
+
+    <div class="note">
+        Only admins can change exam timing
+    </div>
+
+</div>
+
+</body>
+{% endblock %}
