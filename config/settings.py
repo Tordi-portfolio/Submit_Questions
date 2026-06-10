@@ -15,7 +15,7 @@ SECRET_KEY = 'django-insecure-o+z!a7h#xac21rmsh1u@tjf2v31u9$n1^ul85jdiw2@ncwzch5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['chatters-recruitment-form.onrender.com']
+ALLOWED_HOSTS = ['submit-questions.onrender.com']
 
 
 # Application definition
