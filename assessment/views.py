@@ -121,3 +121,40 @@ def admin_responses(request):
     return render(request, "admin/responses.html", {
         "answers": answers
     })
+
+
+
+from django.contrib.auth.models import User
+from django.db.models import Q
+
+@admin_only
+def admin_users(request):
+
+    query = request.GET.get("q")
+
+    if query:
+        users = User.objects.filter(
+            Q(username__icontains=query)
+        ).filter(is_staff=False)
+    else:
+        users = User.objects.filter(is_staff=False)
+
+    return render(request, "admin/users.html", {
+        "users": users,
+        "query": query
+    })
+
+
+@admin_only
+def user_responses(request, user_id):
+
+    user = get_object_or_404(User, id=user_id)
+
+    answers = StudentAnswer.objects.filter(
+        student=user
+    ).select_related("question")
+
+    return render(request, "admin/user_responses.html", {
+        "user": user,
+        "answers": answers
+    })

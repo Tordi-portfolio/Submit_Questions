@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }} Responses{% endblock %}
+
+{% block extra_head %}
+<style>
+
+    .user-response-page {
+        max-width: 1000px;
+        margin: auto;
+        padding: 30px 20px;
+    }
+
+    /* BACK BUTTON */
+    .user-response-page__back {
+        display: inline-block;
+        margin-bottom: 18px;
+        color: #22c55e;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .user-response-page__back:hover {
+        text-decoration: underline;
+    }
+
+    /* HEADER CARD (NEW UPGRADE) */
+    .user-response-page__header {
+        background: #1f2937;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 20px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    }
+
+    .user-response-page__username {
+        color: #22c55e;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    .user-response-page__title {
+        color: #f3f4f6;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    /* CARD */
+    .user-response-page__card {
+        background: #1f2937;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+        transition: 0.2s ease;
+    }
+
+    .user-response-page__card:hover {
+        transform: translateY(-2px);
+        background: #111827;
+    }
+
+    /* QUESTION BLOCK */
+    .user-response-page__q-label {
+        font-size: 11px;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+    }
+
+    .user-response-page__question {
+        color: #e5e7eb;
+        font-size: 15px;
+        font-weight: 500;
+        margin-bottom: 12px;
+        line-height: 1.5;
+    }
+
+    /* ANSWER BLOCK */
+    .user-response-page__a-label {
+        font-size: 11px;
+        color: #22c55e;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+    }
+
+    .user-response-page__answer {
+        color: #d1d5db;
+        font-size: 14px;
+        line-height: 1.6;
+        padding-left: 10px;
+        border-left: 2px solid rgba(34,197,94,0.4);
+    }
+
+    /* EMPTY STATE */
+    .user-response-page__empty {
+        text-align: center;
+        color: #6b7280;
+        margin-top: 25px;
+        font-size: 14px;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="user-response-page">
+
+    <a class="user-response-page__back" href="/assessment/admin/users/">
+        ⬅ Back to Students
+    </a>
+
+    <!-- HEADER -->
+    <div class="user-response-page__header">
+
+        <div class="user-response-page__username">
+            Student Profile
+        </div>
+
+        <div class="user-response-page__title">
+            {{ user.username }} Responses
+        </div>
+
+    </div>
+
+    {% for a in answers %}
+
+        <div class="user-response-page__card">
+
+            <div class="user-response-page__q-label">Question</div>
+            <div class="user-response-page__question">
+                {{ a.question.question_text }}
+            </div>
+
+            <div class="user-response-page__a-label">Answer</div>
+            <div class="user-response-page__answer">
+                {{ a.answer }}
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <p class="user-response-page__empty">No responses yet.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

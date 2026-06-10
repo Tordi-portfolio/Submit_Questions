@@ -1,196 +1,218 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Assessment</title>
+{% extends 'base.html' %}
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block title %}Assessment{% endblock %}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        }
+{% block content %}
 
-        body {
-            background: linear-gradient(135deg, #0f172a, #111827);
-            color: #e5e7eb;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+<style>
+    .assessment-page {
+        background: linear-gradient(135deg, #0f172a, #111827);
+        min-height: calc(100vh - 60px);
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 750px;
+    }
+
+    .exam-card {
+        background: #1f2937;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .progress {
+        font-size: 14px;
+        color: #9ca3af;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .progress-bar {
+        height: 6px;
+        background: #374151;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #22c55e;
+        transition: width 0.3s ease;
+    }
+
+    .question-box {
+        background: #111827;
+        padding: 25px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border-left: 4px solid #22c55e;
+    }
+
+    .question-box h3 {
+        font-size: 18px;
+        line-height: 1.7;
+        color: #f3f4f6;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    .chat-input {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    /* WhatsApp-style textarea */
+    #answer {
+        flex: 1;
+        min-height: 55px;
+        max-height: 250px;
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 12px;
+        border: 1px solid #374151;
+        background: #0f172a;
+        color: white;
+        outline: none;
+        resize: none;
+        overflow-y: auto;
+        line-height: 1.5;
+        transition: 0.2s;
+    }
+
+    #answer:focus {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+    }
+
+    button {
+        padding: 14px 20px;
+        background: #22c55e;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+
+    button:hover {
+        background: #16a34a;
+    }
+
+    .hint {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #9ca3af;
+    }
+
+    @media (max-width: 600px) {
+
+        .exam-card {
             padding: 20px;
         }
 
-        .container {
-            width: 100%;
-            max-width: 750px;
-        }
-
-        .exam-card {
-            background: #1f2937;
-            border-radius: 16px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .progress {
-            font-size: 14px;
-            color: #9ca3af;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .progress-bar {
-            height: 6px;
-            background: #374151;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-bottom: 25px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: #22c55e;
-            width: 40%;
-            transition: width 0.3s ease;
-        }
-
-        .question-box {
-            background: #111827;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-left: 4px solid #22c55e;
-        }
-
-        .question-box h3 {
-            font-size: 18px;
-            line-height: 1.6;
-            color: #f3f4f6;
-        }
-
-        form {
-            margin-top: 20px;
-        }
-
         .chat-input {
-            display: flex;
-            gap: 10px;
-        }
-
-        input {
-            flex: 1;
-            padding: 14px;
-            font-size: 16px;
-            border-radius: 10px;
-            border: 1px solid #374151;
-            background: #0f172a;
-            color: white;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        input:focus {
-            border-color: #22c55e;
-            box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+            flex-direction: column;
         }
 
         button {
-            padding: 14px 20px;
-            background: #22c55e;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.2s;
+            width: 100%;
         }
 
-        button:hover {
-            background: #16a34a;
+        #answer {
+            width: 100%;
         }
+    }
+</style>
 
-        .hint {
-            margin-top: 10px;
-            font-size: 13px;
-            color: #9ca3af;
-        }
+<div class="assessment-page">
 
-        @media (max-width: 600px) {
-            .chat-input {
-                flex-direction: column;
-            }
+    <div class="container">
 
-            button {
-                width: 100%;
-            }
-        }
-    </style>
-</head>
+        <div class="exam-card">
 
-<body>
-
-<div class="container">
-
-    <div class="exam-card">
-
-        <div class="progress">
-            <span>Question {{ current }} of {{ total }}</span>
-            <span>{{ current|floatformat:0 }}/{{ total }}</span>
-        </div>
-
-        <div class="progress-bar">
-            <div class="progress-fill"
-                 style="width: {{ current|floatformat:0 }}/{{ total }} * 100%;">
-            </div>
-        </div>
-
-        <div class="question-box">
-            <h3 id="questionText">
-                {{ question.question_text }}
-            </h3>
-        </div>
-
-        <form id="form">
-
-            <div class="chat-input">
-
-                <input
-                    type="text"
-                    id="answer"
-                    placeholder="Type your answer and press Enter..."
-                    autocomplete="off"
-                >
-
-                <button type="submit">
-                    Submit Answer
-                </button>
-
+            <div class="progress">
+                <span>Question {{ current }} of {{ total }}</span>
+                <span>{{ current }}/{{ total }}</span>
             </div>
 
-            <div class="hint">
-                Press Enter to submit quickly
+            <div class="progress-bar">
+                <div
+                    class="progress-fill"
+                    style="width:{% widthratio current total 100 %}%;">
+                </div>
             </div>
 
-        </form>
+            <div class="question-box">
+                <h3 id="questionText">
+                    {{ question.question_text }}
+                </h3>
+            </div>
+
+            <form id="form">
+
+                <div class="chat-input">
+
+                    <textarea
+                        id="answer"
+                        rows="1"
+                        placeholder="Type your answer here..."
+                        autocomplete="off"
+                    ></textarea>
+
+                    <button type="submit">
+                        Submit Answer
+                    </button>
+
+                </div>
+
+                <div class="hint">
+                    Press <strong>Enter</strong> to submit •
+                    <strong>Shift + Enter</strong> for a new line
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 
 </div>
 
 <script>
-
 const form = document.getElementById("form");
 const input = document.getElementById("answer");
 
+/* Auto-grow textarea like WhatsApp */
+input.addEventListener("input", function () {
+    this.style.height = "auto";
+    this.style.height = this.scrollHeight + "px";
+});
+
+/* Submit answer */
 form.addEventListener("submit", function(e) {
+
     e.preventDefault();
 
-    let answer = input.value;
+    let answer = input.value.trim();
+
+    if (!answer) {
+        alert("Please enter an answer.");
+        return;
+    }
 
     fetch("", {
         method: "POST",
@@ -203,22 +225,28 @@ form.addEventListener("submit", function(e) {
     })
 
     .then(res => res.json())
+
     .then(data => {
+
         if (data.completed) {
             window.location.href = "/assessment/";
         } else {
             location.reload();
         }
+
     });
+
 });
 
-input.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
+/* Enter = Submit | Shift+Enter = New Line */
+input.addEventListener("keydown", function(e) {
+
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
         form.dispatchEvent(new Event("submit"));
     }
-});
 
+});
 </script>
 
-</body>
-</html>
+{% endblock %}

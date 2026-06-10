@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Students{% endblock %}
+
+{% block extra_head %}
+<style>
+
+    /* ===== PAGE WRAPPER (NO CONFLICT) ===== */
+    .students-page {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    /* ===== LEFT PANEL ===== */
+    .students-page__left {
+        width: 30%;
+        background: #1f2937;
+        border-radius: 12px;
+        padding: 15px;
+        border: 1px solid rgba(255,255,255,0.05);
+        height: fit-content;
+    }
+
+    .students-page__title {
+        color: #f3f4f6;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .students-page__search {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #374151;
+        background: #111827;
+        color: #e5e7eb;
+        outline: none;
+        margin-bottom: 12px;
+    }
+
+    .students-page__search:focus {
+        border-color: #22c55e;
+    }
+
+    .students-page__list a {
+        display: block;
+        padding: 10px;
+        margin-bottom: 6px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: #e5e7eb;
+        background: #111827;
+        border: 1px solid rgba(255,255,255,0.05);
+        transition: 0.2s;
+        font-size: 14px;
+    }
+
+    .students-page__list a:hover {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+        transform: translateX(3px);
+    }
+
+    /* ===== RIGHT PANEL ===== */
+    .students-page__right {
+        width: 70%;
+        background: #1f2937;
+        border-radius: 12px;
+        padding: 25px;
+        border: 1px solid rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+    }
+
+    .students-page__empty {
+        color: #9ca3af;
+        font-size: 16px;
+        text-align: center;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        .students-page {
+            flex-direction: column;
+        }
+
+        .students-page__left,
+        .students-page__right {
+            width: 100%;
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="students-page">
+
+    <!-- LEFT -->
+    <div class="students-page__left">
+
+        <div class="students-page__title">Students</div>
+
+        <form method="GET">
+            <input
+                class="students-page__search"
+                type="text"
+                name="q"
+                placeholder="Search student..."
+                value="{{ query }}"
+            >
+        </form>
+
+        <div class="students-page__list">
+
+            {% for user in users %}
+                <a href="{% url 'user_responses' user.id %}">
+                    {{ user.username }}
+                </a>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="students-page__right">
+
+        <div class="students-page__empty">
+            Select a student to view responses
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
