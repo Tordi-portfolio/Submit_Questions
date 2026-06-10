@@ -7,6 +7,7 @@ class RegisterForm(forms.Form):
     full_name = forms.CharField(max_length=150)
     username = forms.CharField(max_length=150)
     phone_number = forms.CharField(max_length=20)
+    telegram_username = forms.CharField(required=False)
     country = forms.CharField(max_length=100)
     age = forms.IntegerField()
 

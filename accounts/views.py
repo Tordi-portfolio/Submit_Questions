@@ -17,7 +17,6 @@ def register_view(request):
     form = RegisterForm()
 
     if request.method == "POST":
-
         form = RegisterForm(request.POST)
 
         if form.is_valid():
@@ -34,16 +33,24 @@ def register_view(request):
             full_name = form.cleaned_data["full_name"]
             username = form.cleaned_data["username"]
             phone = form.cleaned_data["phone_number"]
+            telegram = form.cleaned_data["telegram_username"]
             country = form.cleaned_data["country"]
             age = form.cleaned_data["age"]
+
+            # prevent duplicate username crash
+            if User.objects.filter(username=username).exists():
+                return render(request, "accounts/register.html", {
+                    "form": form,
+                    "error": "Username already exists"
+                })
 
             user = User.objects.create_user(
                 username=username,
                 password=password
             )
 
-            # split full name
-            name_parts = full_name.split(" ", 1)
+            # split full name safely
+            name_parts = full_name.strip().split(" ", 1)
             user.first_name = name_parts[0]
 
             if len(name_parts) > 1:
@@ -55,6 +62,7 @@ def register_view(request):
             Profile.objects.create(
                 user=user,
                 phone_number=phone,
+                telegram_username=telegram,
                 country=country,
                 age=age
             )
@@ -64,6 +72,7 @@ def register_view(request):
     return render(request, "accounts/register.html", {
         "form": form
     })
+
 
 from django.contrib.auth.decorators import login_required
 

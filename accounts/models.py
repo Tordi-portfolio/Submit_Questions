@@ -7,6 +7,7 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=20)
     country = models.CharField(max_length=100)
     age = models.IntegerField(null=True, blank=True)
+    telegram_username = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
         return self.user.username

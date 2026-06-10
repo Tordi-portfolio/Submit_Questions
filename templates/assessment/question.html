@@ -144,6 +144,49 @@
             width: 100%;
         }
     }
+
+</style>
+
+<style>
+    /* =========================
+   DESKTOP ONLY QUESTION AREA
+========================= */
+
+.mobile-warning {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .desktop-only {
+        display: none;
+    }
+
+    .mobile-warning {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 300px;
+        padding: 30px;
+        background: #111827;
+        border-radius: 15px;
+        border: 1px solid #374151;
+    }
+
+    .mobile-warning h2 {
+        color: #ef4444;
+        margin-bottom: 15px;
+        font-size: 24px;
+    }
+
+    .mobile-warning p {
+        color: #d1d5db;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+}
 </style>
 
 <div class="assessment-page">
@@ -152,51 +195,63 @@
 
         <div class="exam-card">
 
-            <!-- 🔥 TIMER -->
+            <!-- TIMER -->
             <div class="timer" id="timer">
                 Loading timer...
             </div>
 
-            <div class="progress">
-                <span>Question {{ current }} of {{ total }}</span>
-                <span>{{ current }}/{{ total }}</span>
+            <!-- MOBILE MESSAGE -->
+            <div class="mobile-warning">
+                <h2>💻 Desktop Required</h2>
+                <p>
+                    This assessment can only be answered using a laptop or desktop computer.
+                    Please login from a computer to continue.
+                </p>
             </div>
 
-            <div class="progress-bar">
-                <div class="progress-fill"
-                     style="width:{% widthratio current total 100 %}%;">
+            <!-- DESKTOP ONLY CONTENT -->
+            <div class="desktop-only">
+
+                <div class="progress">
+                    <span>Question {{ current }} of {{ total }}</span>
+                    <span>{{ current }}/{{ total }}</span>
                 </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill"
+                        style="width:{% widthratio current total 100 %}%;"></div>
+                </div>
+
+                <div class="question-box">
+                    <h3>
+                        {{ question.question_text }}
+                    </h3>
+                </div>
+
+                <form id="form">
+
+                    <div class="chat-input">
+
+                        <textarea
+                            id="answer"
+                            rows="1"
+                            placeholder="Type your answer here..."
+                            autocomplete="off"></textarea>
+
+                        <button type="submit">
+                            Submit Answer
+                        </button>
+
+                    </div>
+
+                    <div class="hint">
+                        Press <strong>Enter</strong> to submit •
+                        <strong>Shift + Enter</strong> for new line
+                    </div>
+
+                </form>
+
             </div>
-
-            <div class="question-box">
-                <h3>
-                    {{ question.question_text }}
-                </h3>
-            </div>
-
-            <form id="form">
-
-                <div class="chat-input">
-
-                    <textarea
-                        id="answer"
-                        rows="1"
-                        placeholder="Type your answer here..."
-                        autocomplete="off"
-                    ></textarea>
-
-                    <button type="submit">
-                        Submit Answer
-                    </button>
-
-                </div>
-
-                <div class="hint">
-                    Press <strong>Enter</strong> to submit •
-                    <strong>Shift + Enter</strong> for new line
-                </div>
-
-            </form>
 
         </div>
 
