@@ -117,7 +117,7 @@ def exam_settings(request):
         settings.duration_minutes = request.POST.get("duration_minutes")
         settings.save()
 
-        return redirect("exam_settings")
+        return redirect("dashboard")
 
     return render(request, "admin/exam_settings.html", {
         "settings": settings
